@@ -119,8 +119,10 @@ function updateUser() {
         </div>
     </AuthenticatedLayout>
 
-    <Modal :show="editingUser !== false">
-        <h1 class="mb-6 text-lg">Edit User</h1>
+    <Modal
+        :show="editingUser !== false"
+        @close="closeModal"
+    >
         <form
             class="space-y-6"
             @submit.prevent="updateUser"
