@@ -1,9 +1,34 @@
 <script setup>
-import { Link, Head } from '@inertiajs/vue3'
+import { Link, Head, useForm } from '@inertiajs/vue3'
+import { ref } from 'vue'
 
 defineProps({
     users: Array,
 })
+
+const editingUser = ref(false)
+
+function openEditModal(user) {
+    editingUser.value = user
+
+    form.name = user.name
+    form.email = user.email
+}
+
+const form = useForm({
+    name: '',
+    email: '',
+})
+
+function closeModal() {
+    editingUser.value = false
+}
+
+function updateUser() {
+    form.put(route('users.update', editingUser.value.id), {
+        onSuccess: closeModal,
+    })
+}
 </script>
 
 <template>
@@ -92,4 +117,53 @@ defineProps({
             </div>
         </div>
     </AuthenticatedLayout>
+
+    <teleport to="body">
+        <div
+            v-show="editingUser"
+            class="fixed inset-0 flex size-full items-center justify-center"
+        >
+            <div class="fixed inset-0 z-40 size-full bg-black/75" />
+            <div class="z-50 w-full max-w-md rounded-lg bg-white p-4">
+                <h1 class="mb-6 text-lg">Edit User</h1>
+                <form
+                    class="space-y-6"
+                    @submit.prevent="updateUser"
+                >
+                    <div>
+                        <InputLabel for="name"> Name </InputLabel>
+                        <TextInput
+                            v-model="form.name"
+                            name="name"
+                            class="mt-1 w-full"
+                        />
+                        <InputError
+                            :message="form.errors.name"
+                            class="mt-2"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel for="email"> Email </InputLabel>
+                        <TextInput
+                            v-model="form.email"
+                            name="email"
+                            class="mt-1 w-full"
+                        />
+                        <InputError
+                            :message="form.errors.email"
+                            class="mt-2"
+                        />
+                    </div>
+
+                    <div class="flex justify-end space-x-3">
+                        <SecondaryButton @click="closeModal">
+                            Cancel
+                        </SecondaryButton>
+                        <PrimaryButton type="submit"> Update </PrimaryButton>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </teleport>
 </template>
