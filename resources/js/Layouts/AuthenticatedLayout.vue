@@ -1,13 +1,27 @@
 <script setup>
-import { ref } from 'vue'
-import { Link } from '@inertiajs/vue3'
-import { modal, close, reset } from '@/useModal.js'
+import { ref, watch } from 'vue'
+import { Link, usePage } from '@inertiajs/vue3'
+import { modal, close, reset, setModal } from '@/useModal.js'
 
 const showingNavigationDropdown = ref(false)
 
 defineProps({
     title: String,
 })
+
+const page = usePage()
+
+watch(
+    () => page.props._modal,
+    (modal) => {
+        if (modal) {
+            setModal({ ...modal })
+        } else {
+            close()
+        }
+    },
+    { immediate: true },
+)
 </script>
 
 <template>
