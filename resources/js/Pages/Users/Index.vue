@@ -1,6 +1,7 @@
 <script setup>
 import { Link, Head, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import Modal from './Modal.vue'
 
 defineProps({
     users: Array,
@@ -118,52 +119,42 @@ function updateUser() {
         </div>
     </AuthenticatedLayout>
 
-    <teleport to="body">
-        <div
-            v-show="editingUser"
-            class="fixed inset-0 flex size-full items-center justify-center"
+    <Modal :show="editingUser !== false">
+        <h1 class="mb-6 text-lg">Edit User</h1>
+        <form
+            class="space-y-6"
+            @submit.prevent="updateUser"
         >
-            <div class="fixed inset-0 z-40 size-full bg-black/75" />
-            <div class="z-50 w-full max-w-md rounded-lg bg-white p-4">
-                <h1 class="mb-6 text-lg">Edit User</h1>
-                <form
-                    class="space-y-6"
-                    @submit.prevent="updateUser"
-                >
-                    <div>
-                        <InputLabel for="name"> Name </InputLabel>
-                        <TextInput
-                            v-model="form.name"
-                            name="name"
-                            class="mt-1 w-full"
-                        />
-                        <InputError
-                            :message="form.errors.name"
-                            class="mt-2"
-                        />
-                    </div>
-
-                    <div>
-                        <InputLabel for="email"> Email </InputLabel>
-                        <TextInput
-                            v-model="form.email"
-                            name="email"
-                            class="mt-1 w-full"
-                        />
-                        <InputError
-                            :message="form.errors.email"
-                            class="mt-2"
-                        />
-                    </div>
-
-                    <div class="flex justify-end space-x-3">
-                        <SecondaryButton @click="closeModal">
-                            Cancel
-                        </SecondaryButton>
-                        <PrimaryButton type="submit"> Update </PrimaryButton>
-                    </div>
-                </form>
+            <div>
+                <InputLabel for="name"> Name </InputLabel>
+                <TextInput
+                    v-model="form.name"
+                    name="name"
+                    class="mt-1 w-full"
+                />
+                <InputError
+                    :message="form.errors.name"
+                    class="mt-2"
+                />
             </div>
-        </div>
-    </teleport>
+
+            <div>
+                <InputLabel for="email"> Email </InputLabel>
+                <TextInput
+                    v-model="form.email"
+                    name="email"
+                    class="mt-1 w-full"
+                />
+                <InputError
+                    :message="form.errors.email"
+                    class="mt-2"
+                />
+            </div>
+
+            <div class="flex justify-end space-x-3">
+                <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                <PrimaryButton type="submit"> Update </PrimaryButton>
+            </div>
+        </form>
+    </Modal>
 </template>
