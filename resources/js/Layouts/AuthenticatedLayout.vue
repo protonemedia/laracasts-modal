@@ -1,14 +1,22 @@
 <script setup>
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import { modal, close } from '@/useModal.js'
 
 const showingNavigationDropdown = ref(false)
+
 defineProps({
     title: String,
 })
 </script>
 
 <template>
+    <modal.resolvedComponent.default
+        v-if="modal"
+        v-bind="modal.props"
+        @close="close"
+    />
+
     <div>
         <div class="min-h-screen bg-gray-100">
             <nav class="border-b border-gray-100 bg-white">

@@ -21,6 +21,7 @@ watch(
             form.email = user.email
         }
     },
+    { immediate: true },
 )
 
 function closeModal() {

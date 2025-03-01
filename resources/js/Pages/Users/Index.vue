@@ -1,13 +1,9 @@
 <script setup>
 import { Link, Head } from '@inertiajs/vue3'
-import { ref } from 'vue'
-import EditModal from './EditModal.vue'
 
 defineProps({
     users: Array,
 })
-
-const editingUser = ref(null)
 </script>
 
 <template>
@@ -83,12 +79,12 @@ const editingUser = ref(null)
                                 >
                                     Edit
                                 </Link>
-                                <button
+                                <ModalLink
+                                    :href="route('users.edit', user)"
                                     class="text-indigo-600 hover:text-indigo-900"
-                                    @click="editingUser = user"
                                 >
                                     Edit in Modal
-                                </button>
+                                </ModalLink>
                             </td>
                         </tr>
                     </tbody>
@@ -96,9 +92,4 @@ const editingUser = ref(null)
             </div>
         </div>
     </AuthenticatedLayout>
-
-    <EditModal
-        :user="editingUser"
-        @close="editingUser = false"
-    />
 </template>

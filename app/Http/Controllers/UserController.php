@@ -56,7 +56,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return Inertia::render('Users/Edit', [
+        return Inertia::render(request()->wantsModal() ? 'Users/EditModal' : 'Users/Edit', [
             'user' => $user,
         ]);
     }
