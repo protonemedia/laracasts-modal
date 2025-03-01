@@ -71,6 +71,7 @@ if (!props.closeManually) {
         >
             <div
                 v-show="show"
+                dusk="modal-wrapper"
                 class="fixed inset-0 flex size-full items-center justify-center"
             >
                 <transition
@@ -100,6 +101,7 @@ if (!props.closeManually) {
                 >
                     <div
                         v-show="show"
+                        dusk="modal-content"
                         class="z-50 max-h-[calc(100vh-2rem)] w-full overflow-auto rounded-lg bg-white p-4"
                         :class="{
                             'max-w-sm': size === 'sm',

@@ -75,6 +75,7 @@ defineProps({
                                 </Link>
                                 <Link
                                     :href="route('users.edit', user)"
+                                    :dusk="`edit-user-${user.id}`"
                                     class="text-indigo-600 hover:text-indigo-900"
                                 >
                                     Edit
