@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
-import { modal, close } from '@/useModal.js'
+import { modal, close, reset } from '@/useModal.js'
 
 const showingNavigationDropdown = ref(false)
 
@@ -13,8 +13,10 @@ defineProps({
 <template>
     <modal.resolvedComponent.default
         v-if="modal"
+        :show="modal.show"
         v-bind="modal.props"
         @close="close"
+        @after-leave="reset"
     />
 
     <div>

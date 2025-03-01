@@ -19,12 +19,17 @@ function open(href) {
             ).then((component) => {
                 modal.value = response.data
                 modal.value.resolvedComponent = component
+                modal.value.show = true
             })
         })
 }
 
 function close() {
+    modal.value.show = false
+}
+
+function reset() {
     modal.value = null
 }
 
-export { close, modal, open }
+export { close, modal, open, reset }

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 
 const props = defineProps({
     show: {
@@ -25,7 +25,15 @@ const props = defineProps({
     },
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'after-leave'])
+
+watch(
+    () => props.show,
+    (show) => {
+        document.body.style.overflow = show ? 'hidden' : ''
+    },
+    { immediate: true },
+)
 
 function close() {
     emit('close')
@@ -57,12 +65,16 @@ if (!props.closeManually) {
 
 <template>
     <teleport to="body">
-        <transition leave-active-class="duration-300">
+        <transition
+            leave-active-class="duration-300"
+            @after-leave="$emit('after-leave')"
+        >
             <div
                 v-show="show"
                 class="fixed inset-0 flex size-full items-center justify-center"
             >
                 <transition
+                    appear
                     enter-from-class="opacity-0"
                     enter-to-class="opacity-100"
                     enter-active-class="transition duration-300"
@@ -78,6 +90,7 @@ if (!props.closeManually) {
                 </transition>
 
                 <transition
+                    appear
                     enter-from-class="opacity-0 scale-90"
                     enter-to-class="opacity-100 scale-100"
                     enter-active-class="transition duration-300"
@@ -87,7 +100,7 @@ if (!props.closeManually) {
                 >
                     <div
                         v-show="show"
-                        class="z-50 w-full rounded-lg bg-white p-4"
+                        class="z-50 max-h-[calc(100vh-2rem)] w-full overflow-auto rounded-lg bg-white p-4"
                         :class="{
                             'max-w-sm': size === 'sm',
                             'max-w-md': size === 'md',

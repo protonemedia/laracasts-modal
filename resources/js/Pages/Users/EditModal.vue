@@ -37,7 +37,6 @@ function updateUser() {
 
 <template>
     <Modal
-        :show="user"
         title="Editing User"
         size="md"
         @close="closeModal"
