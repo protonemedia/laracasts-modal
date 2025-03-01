@@ -6,6 +6,10 @@ import { ref } from 'vue'
 const modal = ref(null)
 
 function setModal(data) {
+    if (modal.value) {
+        return
+    }
+
     resolvePageComponent(
         `./Pages/${data.component}.vue`,
         import.meta.glob('./Pages/**/*.vue'),

@@ -21,8 +21,20 @@ class AppServiceProvider extends ServiceProvider
             return $this->header('X-Modal') ? true : false;
         });
 
+        ResponseFactory::macro('backFromModal', function () {
+            // Redirect back to base url
+            if ($baseUrl = request()->header('X-Modal-Base-Url')) {
+                return redirect($baseUrl);
+            }
+
+            // Fallback
+            return back();
+        });
+
         ResponseFactory::macro('modal', function (string $component, array $props, string $baseUrl) {
-            $baseUrl = request()->header('referer') ?: $baseUrl;
+            $baseUrl = request()->header('X-Modal-Base-Url')
+                ?: request()->header('referer')
+                ?: $baseUrl;
 
             $request = Request::create($baseUrl);
             $route = Route::getRoutes()->match($request);

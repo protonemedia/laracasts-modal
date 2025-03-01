@@ -73,7 +73,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return back()->with('status', 'User updated successfully.');
+        return Inertia::backFromModal()->with('status', 'User updated successfully.');
     }
 
     /**
