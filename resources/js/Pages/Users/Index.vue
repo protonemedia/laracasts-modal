@@ -121,8 +121,14 @@ function updateUser() {
 
     <Modal
         :show="editingUser !== false"
+        title="Editing User"
+        size="md"
+        close-manually
         @close="closeModal"
     >
+        <template #title>
+            <h3 class="font-bold text-red-500">Edit User!</h3>
+        </template>
         <form
             class="space-y-6"
             @submit.prevent="updateUser"

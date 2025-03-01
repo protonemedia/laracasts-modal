@@ -6,6 +6,23 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    title: {
+        type: String,
+        required: false,
+    },
+    size: {
+        type: String,
+        required: true,
+        default: 'md',
+        validator(value) {
+            return ['sm', 'md', 'lg', 'xl'].includes(value)
+        },
+    },
+    closeManually: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 })
 
 const emit = defineEmits(['close'])
@@ -32,8 +49,10 @@ function closeOnEscape($event) {
     close()
 }
 
-onMounted(() => document.addEventListener('keydown', closeOnEscape))
-onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
+if (!props.closeManually) {
+    onMounted(() => document.addEventListener('keydown', closeOnEscape))
+    onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
+}
 </script>
 
 <template>
@@ -54,7 +73,7 @@ onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
                     <div
                         v-show="show"
                         class="fixed inset-0 z-40 size-full bg-black/75"
-                        @click="close"
+                        @click="closeManually ? null : close()"
                     />
                 </transition>
 
@@ -68,8 +87,17 @@ onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
                 >
                     <div
                         v-show="show"
-                        class="z-50 w-full max-w-md rounded-lg bg-white p-4"
+                        class="z-50 w-full rounded-lg bg-white p-4"
+                        :class="{
+                            'max-w-sm': size === 'sm',
+                            'max-w-md': size === 'md',
+                            'max-w-lg': size === 'lg',
+                            'max-w-xl': size === 'xl',
+                        }"
                     >
+                        <slot name="title">
+                            <h1 class="mb-6 text-lg">{{ title }}</h1>
+                        </slot>
                         <slot />
                     </div>
                 </transition>
