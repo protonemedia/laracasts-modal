@@ -73,7 +73,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return to_route('users.index')->with('status', 'User updated successfully.');
+        return back()->with('status', 'User updated successfully.');
     }
 
     /**

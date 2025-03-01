@@ -1,35 +1,13 @@
 <script setup>
-import { Link, Head, useForm } from '@inertiajs/vue3'
+import { Link, Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import Modal from './Modal.vue'
+import EditModal from './EditModal.vue'
 
 defineProps({
     users: Array,
 })
 
-const editingUser = ref(false)
-
-function openEditModal(user) {
-    editingUser.value = user
-
-    form.name = user.name
-    form.email = user.email
-}
-
-const form = useForm({
-    name: '',
-    email: '',
-})
-
-function closeModal() {
-    editingUser.value = false
-}
-
-function updateUser() {
-    form.put(route('users.update', editingUser.value.id), {
-        onSuccess: closeModal,
-    })
-}
+const editingUser = ref(null)
 </script>
 
 <template>
@@ -107,7 +85,7 @@ function updateUser() {
                                 </Link>
                                 <button
                                     class="text-indigo-600 hover:text-indigo-900"
-                                    @click="openEditModal(user)"
+                                    @click="editingUser = user"
                                 >
                                     Edit in Modal
                                 </button>
@@ -119,50 +97,8 @@ function updateUser() {
         </div>
     </AuthenticatedLayout>
 
-    <Modal
-        :show="editingUser !== false"
-        title="Editing User"
-        size="md"
-        close-manually
-        @close="closeModal"
-    >
-        <template #title>
-            <h3 class="font-bold text-red-500">Edit User!</h3>
-        </template>
-        <form
-            class="space-y-6"
-            @submit.prevent="updateUser"
-        >
-            <div>
-                <InputLabel for="name"> Name </InputLabel>
-                <TextInput
-                    v-model="form.name"
-                    name="name"
-                    class="mt-1 w-full"
-                />
-                <InputError
-                    :message="form.errors.name"
-                    class="mt-2"
-                />
-            </div>
-
-            <div>
-                <InputLabel for="email"> Email </InputLabel>
-                <TextInput
-                    v-model="form.email"
-                    name="email"
-                    class="mt-1 w-full"
-                />
-                <InputError
-                    :message="form.errors.email"
-                    class="mt-2"
-                />
-            </div>
-
-            <div class="flex justify-end space-x-3">
-                <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
-                <PrimaryButton type="submit"> Update </PrimaryButton>
-            </div>
-        </form>
-    </Modal>
+    <EditModal
+        :user="editingUser"
+        @close="editingUser = false"
+    />
 </template>
